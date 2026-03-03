@@ -1,0 +1,58 @@
+[
+  {
+    "prompt_preview": "Hi, I'd like to book a dental appointment....",
+    "avg_latency_s": 8.362,
+    "p95_latency_s": 19.341,
+    "avg_ttft_s": 2.434,
+    "min_s": 4.149,
+    "max_s": 19.341
+  },
+  {
+    "prompt_preview": "My name is John Smith....",
+    "avg_latency_s": 3.453,
+    "p95_latency_s": 3.863,
+    "avg_ttft_s": 2.431,
+    "min_s": 2.915,
+    "max_s": 3.863
+  },
+  {
+    "prompt_preview": "I need a routine check-up....",
+    "avg_latency_s": 9.881,
+    "p95_latency_s": 27.526,
+    "avg_ttft_s": 2.275,
+    "min_s": 2.799,
+    "max_s": 27.526
+  },
+  {
+    "prompt_preview": "How about this Thursday at 10 AM?...",
+    "avg_latency_s": 3.876,
+    "p95_latency_s": 4.841,
+    "avg_ttft_s": 2.275,
+    "min_s": 2.958,
+    "max_s": 4.841
+  },
+  {
+    "prompt_preview": "Can I cancel my appointment?...",
+    "avg_latency_s": 4.84,
+    "p95_latency_s": 6.719,
+    "avg_ttft_s": 2.279,
+    "min_s": 3.856,
+    "max_s": 6.719
+  },
+  {
+    "prompt_preview": "What services do you offer?...",
+    "avg_latency_s": 6.403,
+    "p95_latency_s": 13.252,
+    "avg_ttft_s": 2.288,
+    "min_s": 3.571,
+    "max_s": 13.252
+  },
+  {
+    "prompt_preview": "Can you recommend a restaurant nearby?...",
+    "avg_latency_s": 8.717,
+    "p95_latency_s": 17.406,
+    "avg_ttft_s": 2.314,
+    "min_s": 3.721,
+    "max_s": 17.406
+  }
+]
