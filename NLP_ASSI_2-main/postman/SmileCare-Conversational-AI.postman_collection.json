@@ -1,0 +1,82 @@
+{
+  "info": {
+    "name": "SmileCare Conversational AI",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "REST checks for the stateless local dental clinic assistant."
+  },
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        }
+      }
+    },
+    {
+      "name": "Create Session",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/sessions",
+          "host": ["{{baseUrl}}"],
+          "path": ["sessions"]
+        }
+      }
+    },
+    {
+      "name": "Chat Turn",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"message\": \"I want to book an appointment\",\n  \"session\": {{sessionPayload}}\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/chat",
+          "host": ["{{baseUrl}}"],
+          "path": ["chat"]
+        }
+      }
+    },
+    {
+      "name": "Reset Session",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/sessions/{{sessionId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["sessions", "{{sessionId}}"]
+        }
+      }
+    },
+    {
+      "name": "WebSocket URL",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "ws://127.0.0.1:8000/ws/chat",
+          "protocol": "ws",
+          "host": ["127", "0", "0", "1"],
+          "port": "8000",
+          "path": ["ws", "chat"]
+        },
+        "description": "Open this URL in Postman's WebSocket client and send {\"message\":\"I want to book an appointment\",\"session\":<session object>} after receiving the initial session event."
+      }
+    }
+  ],
+  "variable": [
+    {"key": "baseUrl", "value": "http://127.0.0.1:8000"},
+    {"key": "sessionId", "value": "replace-me"},
+    {"key": "sessionPayload", "value": "{\"session_id\":\"replace-me\",\"window_size\":12,\"history\":[],\"intent\":null,\"state\":null,\"entities\":{},\"policy_flags\":{}}"}
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "base_url": "http://127.0.0.1:8001",
+  "runs": 3,
+  "overall_avg_latency_s": 0.149,
+  "turn_count": 24,
+  "results": [
+    {
+      "prompt": "I want to book an appointment",
+      "avg_latency_s": 0.002,
+      "p95_latency_s": 0.001,
+      "min_latency_s": 0.001,
+      "max_latency_s": 0.003
+    },
+    {
+      "prompt": "Maria Gonzalez",
+      "avg_latency_s": 0.002,
+      "p95_latency_s": 0.001,
+      "min_latency_s": 0.001,
+      "max_latency_s": 0.003
+    },
+    {
+      "prompt": "routine check-up",
+      "avg_latency_s": 0.001,
+      "p95_latency_s": 0.001,
+      "min_latency_s": 0.001,
+      "max_latency_s": 0.002
+    },
+    {
+      "prompt": "Thursday at 10 AM",
+      "avg_latency_s": 0.001,
+      "p95_latency_s": 0.001,
+      "min_latency_s": 0.001,
+      "max_latency_s": 0.002
+    },
+    {
+      "prompt": "maria@example.com",
+      "avg_latency_s": 0.001,
+      "p95_latency_s": 0.001,
+      "min_latency_s": 0.001,
+      "max_latency_s": 0.002
+    },
+    {
+      "prompt": "yes",
+      "avg_latency_s": 0.001,
+      "p95_latency_s": 0.001,
+      "min_latency_s": 0.001,
+      "max_latency_s": 0.001
+    },
+    {
+      "prompt": "What services do you offer?",
+      "avg_latency_s": 0.001,
+      "p95_latency_s": 0.001,
+      "min_latency_s": 0.001,
+      "max_latency_s": 0.001
+    },
+    {
+      "prompt": "Can you recommend a restaurant nearby?",
+      "avg_latency_s": 1.181,
+      "p95_latency_s": 0.44,
+      "min_latency_s": 0.435,
+      "max_latency_s": 2.667
+    }
+  ]
+}

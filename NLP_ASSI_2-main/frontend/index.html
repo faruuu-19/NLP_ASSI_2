@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmileCare Conversational AI</title>
+  <style>
+    :root {
+      --bg: #f3efe7;
+      --bg-accent: radial-gradient(circle at top left, rgba(9, 135, 120, 0.18), transparent 36%), radial-gradient(circle at bottom right, rgba(230, 98, 67, 0.18), transparent 34%);
+      --panel: rgba(255, 255, 255, 0.82);
+      --panel-strong: rgba(255, 255, 255, 0.95);
+      --text: #162021;
+      --muted: #64706f;
+      --brand: #0d756f;
+      --brand-strong: #095f5b;
+      --assistant: #edf7f5;
+      --user: #162021;
+      --user-text: #f7faf9;
+      --border: rgba(22, 32, 33, 0.12);
+      --shadow: 0 20px 50px rgba(22, 32, 33, 0.12);
+      --font-sans: "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
+      --font-serif: "Iowan Old Style", "Palatino Linotype", serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-sans);
+      color: var(--text);
+      background: var(--bg-accent), var(--bg);
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .app {
+      width: min(1080px, 100%);
+      min-height: min(820px, calc(100vh - 48px));
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 32px;
+      backdrop-filter: blur(20px);
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      background: linear-gradient(180deg, rgba(9, 117, 111, 0.96), rgba(12, 74, 84, 0.92));
+      color: #eef6f5;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    .sidebar h1 {
+      margin: 0;
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 3vw, 3rem);
+      line-height: 0.95;
+      font-weight: 600;
+    }
+
+    .sidebar p {
+      margin: 0;
+      line-height: 1.55;
+      color: rgba(238, 246, 245, 0.84);
+    }
+
+    .stat {
+      padding: 14px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      opacity: 0.78;
+      margin-bottom: 8px;
+    }
+
+    .main {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,255,255,0.95));
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      gap: 12px;
+    }
+
+    .toolbar h2 {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .toolbar button {
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 16px;
+      background: var(--brand);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 160ms ease, background 160ms ease;
+    }
+
+    .toolbar button.secondary {
+      background: rgba(13, 117, 111, 0.12);
+      color: var(--brand-strong);
+    }
+
+    .toolbar button:hover { transform: translateY(-1px); }
+
+    .messages {
+      padding: 28px 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      scroll-behavior: smooth;
+    }
+
+    .message {
+      max-width: min(78%, 680px);
+      padding: 16px 18px;
+      border-radius: 22px;
+      line-height: 1.5;
+      animation: rise 220ms ease;
+      white-space: pre-wrap;
+    }
+
+    .message.assistant {
+      background: var(--assistant);
+      border-top-left-radius: 8px;
+      align-self: flex-start;
+      color: var(--text);
+    }
+
+    .message.user {
+      background: var(--user);
+      color: var(--user-text);
+      border-top-right-radius: 8px;
+      align-self: flex-end;
+    }
+
+    .composer {
+      padding: 20px 24px 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 58px;
+      max-height: 180px;
+      resize: vertical;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      padding: 16px 18px;
+      font: inherit;
+      background: var(--panel-strong);
+      color: var(--text);
+    }
+
+    .send {
+      align-self: end;
+      border: 0;
+      border-radius: 20px;
+      padding: 0 22px;
+      min-height: 58px;
+      background: linear-gradient(135deg, var(--brand), #0d5e72);
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .meta {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.88rem;
+      color: var(--muted);
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    @keyframes rise {
+      from { transform: translateY(12px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @media (max-width: 900px) {
+      .app { grid-template-columns: 1fr; min-height: calc(100vh - 32px); }
+      .message { max-width: 90%; }
+      .toolbar { flex-direction: column; align-items: stretch; }
+      .actions { width: 100%; }
+      .actions button { flex: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div>
+        <div class="eyebrow">Local CPU Assistant</div>
+        <h1>SmileCare<br>Chat</h1>
+      </div>
+      <p>Stateless browser-to-backend chat. The browser carries session memory, while FastAPI and WebSocket endpoints remain server-stateless.</p>
+      <div class="stat">
+        <strong>Streaming</strong>
+        <span>Responses arrive incrementally over WebSocket events.</span>
+      </div>
+      <div class="stat">
+        <strong>Session ID</strong>
+        <span id="sessionLabel">Connecting…</span>
+      </div>
+      <div class="stat">
+        <strong>Status</strong>
+        <span id="statusLabel">Opening socket…</span>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="toolbar">
+        <h2>Dental Clinic Conversational AI</h2>
+        <div class="actions">
+          <button id="resetBtn" class="secondary" type="button">Reset</button>
+          <button id="newChatBtn" type="button">New Session</button>
+        </div>
+      </div>
+
+      <section class="messages" id="messages"></section>
+
+      <div class="composer">
+        <form id="chatForm">
+          <textarea id="messageInput" placeholder="Ask about booking, cancelling, rescheduling, clinic hours, or services..." required></textarea>
+          <button class="send" type="submit">Send</button>
+        </form>
+        <div class="meta">
+          <span>Client-side session memory is attached to every WebSocket request.</span>
+          <span id="intentLabel">Intent: waiting</span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const messagesEl = document.getElementById('messages');
+    const inputEl = document.getElementById('messageInput');
+    const formEl = document.getElementById('chatForm');
+    const newChatBtn = document.getElementById('newChatBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const sessionLabel = document.getElementById('sessionLabel');
+    const statusLabel = document.getElementById('statusLabel');
+    const intentLabel = document.getElementById('intentLabel');
+
+    let socket;
+    let currentSession = null;
+    let streamingBubble = null;
+
+    function addMessage(role, text) {
+      const bubble = document.createElement('div');
+      bubble.className = `message ${role}`;
+      bubble.textContent = text;
+      messagesEl.appendChild(bubble);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+      return bubble;
+    }
+
+    function syncSession(session) {
+      currentSession = session;
+      sessionLabel.textContent = session?.session_id || 'Unavailable';
+    }
+
+    function clearChat(seedMessage) {
+      messagesEl.innerHTML = '';
+      addMessage('assistant', seedMessage);
+      intentLabel.textContent = 'Intent: waiting';
+    }
+
+    function connect() {
+      const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+      socket = new WebSocket(`${protocol}://${window.location.host}/ws/chat`);
+
+      socket.addEventListener('open', () => {
+        statusLabel.textContent = 'Connected';
+      });
+
+      socket.addEventListener('message', (event) => {
+        const payload = JSON.parse(event.data);
+
+        if (payload.type === 'session') {
+          syncSession(payload.session);
+          return;
+        }
+
+        if (payload.type === 'start') {
+          streamingBubble = addMessage('assistant', '');
+          intentLabel.textContent = `Intent: ${payload.intent}`;
+          return;
+        }
+
+        if (payload.type === 'delta' && streamingBubble) {
+          streamingBubble.textContent += payload.content;
+          messagesEl.scrollTop = messagesEl.scrollHeight;
+          return;
+        }
+
+        if (payload.type === 'end') {
+          if (streamingBubble && !streamingBubble.textContent.trim()) {
+            streamingBubble.textContent = payload.reply;
+          }
+          syncSession(payload.session);
+          intentLabel.textContent = `Intent: ${payload.intent}`;
+          streamingBubble = null;
+          return;
+        }
+
+        if (payload.type === 'reset') {
+          syncSession(payload.session);
+          clearChat('Session reset. How can I help you with dental scheduling today?');
+          return;
+        }
+
+        if (payload.type === 'error') {
+          addMessage('assistant', `Error: ${payload.detail}`);
+        }
+      });
+
+      socket.addEventListener('close', () => {
+        statusLabel.textContent = 'Disconnected';
+      });
+    }
+
+    formEl.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const message = inputEl.value.trim();
+      if (!message || socket.readyState !== WebSocket.OPEN || !currentSession) {
+        return;
+      }
+      addMessage('user', message);
+      socket.send(JSON.stringify({ message, session: currentSession }));
+      inputEl.value = '';
+      inputEl.focus();
+    });
+
+    newChatBtn.addEventListener('click', () => {
+      if (socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify({ action: 'new_session' }));
+        clearChat('New session started. How can I help you with dental scheduling today?');
+      }
+    });
+
+    resetBtn.addEventListener('click', () => {
+      if (socket.readyState === WebSocket.OPEN && currentSession) {
+        socket.send(JSON.stringify({ action: 'reset', session: currentSession }));
+      }
+    });
+
+    clearChat('Welcome to SmileCare Dental Clinic. I can help with booking, cancellation, rescheduling, clinic hours, and available services.');
+    connect();
+  </script>
+</body>
+</html>
